@@ -8,7 +8,7 @@ export const devConfig = {
   name: `${getExploreName()}-${Math.floor(Math.random() * 1000)}`,
   password: '',
   signature:
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBfa2V5IjoiZThSeU82RXFSTUdwbW51Q3BNdjhfZyIsInJvbGVfdHlwZSI6MSwidHBjIjoiVGVzdCIsInZlcnNpb24iOjEsImlhdCI6MTcyODk4Nzc2MCwiZXhwIjoxNzI4OTkxMzYwfQ.YhNEvu1gCxLgh8dOe5Eqz1EFDbDsi_sOmy9quJbFWT4',
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBfa2V5IjoiZThSeU82RXFSTUdwbW51Q3BNdjhfZyIsInJvbGVfdHlwZSI6MSwidHBjIjoiVGVzdCIsInZlcnNpb24iOjEsImlhdCI6MTcyODk5NDkzNCwiZXhwIjoxNzI4OTk4NTM0fQ.zfmNy06b2nVG5OESPdEKA_XpZt7MuRYl7uFxTeTDTFg',
   sessionKey: '',
   userIdentity: '',
   // The user role. 1 to specify host or co-host. 0 to specify participant, Participants can join before the host. The session is started when the first user joins. Be sure to use a number type.
