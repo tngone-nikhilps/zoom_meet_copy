@@ -3,17 +3,20 @@
 .preview__root {
   flex-direction: column;
   height: fit-content;
+  background-color: black;
+  width: 100%;
 }
 .video-app {
   display: flex;
   flex-direction: column;
   align-items: center;
+  height: 100vh;
 }
 .preview-video {
   position: relative;
-  width: 800px;
-  height: 450px;
-  background: rgba(0, 0, 0, 1);
+  width: 850px;
+ aspect-ratio: 16/9;
+  border: 1px solid #00b152;
   border-radius: 14px;
   overflow: hidden;
   &>video, &>canvas {
@@ -22,10 +25,12 @@
     left: 0;
     width: 100%;
     height: 100%;
+    background: #313131;
     display: none;
   }
   & > .preview-video-show{
     display: block;
+  background-color: #313131;
   }
 }
 

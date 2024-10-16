@@ -1,5 +1,5 @@
 import { useEffect, useContext, useState, useCallback, useReducer, useMemo } from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, useHistory } from 'react-router-dom';
 import ZoomVideo, { ConnectionState, ReconnectReason } from '@zoom/videosdk';
 import { message, Modal } from 'antd';
 import 'antd/dist/antd.min.css';
@@ -109,7 +109,8 @@ function App(props: AppProps) {
       useVideoPlayer
     }
   } = props;
-  const [loading, setIsLoading] = useState(true);
+
+  const [loading, setIsLoading] = useState(false);
   const [loadingText, setLoadingText] = useState('');
   const [isFailover, setIsFailover] = useState<boolean>(false);
   const [status, setStatus] = useState<string>('closed');
@@ -151,37 +152,29 @@ function App(props: AppProps) {
         patchJsMedia: true,
         leaveOnPageUnload: false
       });
-      try {
-        setLoadingText('Joining the session...');
-        await zmClient.join(topic, signature, name, password).catch((e) => {
-          console.log(e);
-        });
-        const stream = zmClient.getMediaStream();
-        setMediaStream(stream);
-        setIsSupportGalleryView(stream.isSupportMultipleVideos());
-        setIsLoading(false);
-      } catch (e: any) {
-        setIsLoading(false);
-        message.error(e.reason);
-      }
     };
     init();
     return () => {
       ZoomVideo.destroyClient();
     };
-  }, [
-    sdkKey,
-    signature,
-    zmClient,
-    topic,
-    name,
-    password,
-    webEndpoint,
-    galleryViewWithoutSAB,
-    customerJoinId,
-    lang,
-    vbWithoutSAB
-  ]);
+  }, []);
+  const joinSession = async () => {
+    setIsLoading(true);
+    try {
+      setLoadingText('Joining the session...');
+      await zmClient.join(topic, signature, name, password).catch((e) => {
+        console.log(e);
+      });
+      const stream = zmClient.getMediaStream();
+      setMediaStream(stream);
+      setIsSupportGalleryView(stream.isSupportMultipleVideos());
+    } catch (e: any) {
+      setIsLoading(false);
+      message.error(e.reason);
+    } finally {
+      setIsLoading(false);
+    }
+  };
   const onConnectionChange = useCallback(
     (payload: any) => {
       if (payload.state === ConnectionState.Reconnecting) {
@@ -241,7 +234,7 @@ function App(props: AppProps) {
       zmClient.off('media-sdk-change', onMediaSDKChange);
     };
   }, [zmClient, onConnectionChange, onMediaSDKChange]);
-  console.log({ isSupportGalleryView, galleryViewWithAttach });
+  console.log(loading, 'isLoading');
   return (
     <div className="App">
       {loading && <LoadingLayer content={loadingText} />}
@@ -249,11 +242,11 @@ function App(props: AppProps) {
         <ZoomMediaContext.Provider value={mediaContext}>
           <Router>
             <Switch>
-              <Route
+              {/* <Route
                 path="/"
                 render={(props) => <Home {...props} status={status} onLeaveOrJoinSession={onLeaveOrJoinSession} />}
                 exact
-              />
+              /> */}
               <Route path="/index.html" component={Home} exact />
               <Route path="/chat" component={Chat} />
               <Route path="/command" component={Command} />
@@ -262,7 +255,7 @@ function App(props: AppProps) {
                 component={isSupportGalleryView ? (galleryViewWithAttach ? VideoAttach : Video) : VideoSingle}
               />
               <Route path="/subsession" component={Subsession} />
-              <Route path="/preview" component={Preview} />
+              <Route path="/" render={(props) => <Preview {...props} joinSession={joinSession} />} />
             </Switch>
           </Router>
         </ZoomMediaContext.Provider>

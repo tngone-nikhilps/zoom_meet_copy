@@ -7,7 +7,10 @@ import CameraButton from '../video/components/camera';
 import { message, Button, Progress, Select } from 'antd';
 import { MediaDevice } from '../video/video-types';
 import classNames from 'classnames';
-
+import { RouteComponentProps, useHistory } from 'react-router-dom';
+interface PreviewProps extends RouteComponentProps {
+  joinSession: () => void;
+}
 // label: string;
 // deviceId: string;
 let prevMicFeedbackStyle = '';
@@ -78,7 +81,10 @@ const updateMicFeedbackStyle = () => {
 
 const { Option } = Select;
 
-const PreviewContainer = () => {
+const PreviewContainer: React.FunctionComponent<PreviewProps> = (props: any) => {
+  const { joinSession } = props;
+  const history = useHistory();
+
   const [isStartedAudio, setIsStartedAudio] = useState<boolean>(false);
   const [isMuted, setIsMuted] = useState<boolean>(true);
   const [isStartedVideo, setIsStartedVideo] = useState<boolean>(false);
@@ -204,38 +210,7 @@ const PreviewContainer = () => {
       setIsPlayingAudio(true);
     }
   };
-  const onTestMicrophoneClick = () => {
-    if (speakerTesterRef.current) {
-      speakerTesterRef.current.destroy();
-      speakerTesterRef.current = undefined;
-    }
-    if (!isPlayingRecording && !isRecordingVoice) {
-      microphoneTesterRef.current = localAudio.testMicrophone({
-        microphoneId: activeMicrophone,
-        speakerId: activeSpeaker,
-        recordAndPlay: true,
-        onAnalyseFrequency: (value) => {
-          setInputLevel(Math.min(100, value));
-        },
-        onStartRecording: () => {
-          setIsRecordingVoice(true);
-        },
-        onStartPlayRecording: () => {
-          setIsRecordingVoice(false);
-          setIsPlayingRecording(true);
-        },
-        onStopPlayRecording: () => {
-          setIsPlayingRecording(false);
-        }
-      });
-    } else if (isRecordingVoice) {
-      microphoneTesterRef.current?.stopRecording();
-      setIsRecordingVoice(false);
-    } else if (isPlayingRecording) {
-      microphoneTesterRef.current?.stop();
-      setIsPlayingRecording(false);
-    }
-  };
+
   let microphoneBtn = 'Test Microphone';
   if (isRecordingVoice) {
     microphoneBtn = 'Recording';
@@ -253,21 +228,24 @@ const PreviewContainer = () => {
 
   return (
     <div className="js-preview-view">
-      <div id="js-preview-view" className="container preview__root">
-        <span>
-          <h1>Audio And Video Preview</h1>
-        </span>
-        <div className="container video-app">
-          <div className="preview-video">
+      <div id="js-preview-view" className=" preview__root ">
+        <div className=" video-app w-full ">
+          <div className="px-[30px] w-full flex justify-start pt-[20px]">
+            <img src="/icons/darkMode/fullLogo.svg" alt="" />
+          </div>
+          <div className="preview-video  ring-primary ring-1">
+            <div className="px-[1.5rem] py-[.42rem] z-20 rounded-[4.5rem] bg-[#a2a2a2] absolute left-4 bottom-4">
+              <span className="text-[1rem]">Nikhil Ps</span>
+            </div>{' '}
             <video className={classNames({ 'preview-video-show': !isInVBMode })} muted={true} ref={videoRef} />
             <canvas
               className={classNames({ 'preview-video-show': isInVBMode })}
-              width="1280"
-              height="720"
+              width="100%"
+              height="100%"
               ref={canvasRef}
             />
           </div>
-          <div className="video-footer video-operations video-operations-preview">
+          <div className="video-footer video-operations video-operations-preview  mt-[3.31rem]">
             <div>
               <MicrophoneButton
                 isStartedAudio={isStartedAudio}
@@ -290,62 +268,17 @@ const PreviewContainer = () => {
                 isPreview={true}
               />
             </div>
-          </div>
-        </div>
-        <div className="audio-test">
-          <div className="audio-test-wrap">
-            <h3>Speaker Test</h3>
-            <div className="speaker-action">
-              <Button type="primary" onClick={onTestSpeakerClick} className="speaker-btn">
-                {isPlayingAudio ? 'Stop' : 'Test Speaker'}
-              </Button>
-              <Select
-                onChange={(value) => {
-                  setActiveSpeaker(value);
+            <button className="h-[3.75rem] bg-[#1A71FF] rounded-[4.5rem] w-[9rem]">
+              <span
+                className="text-[1rem] text-white"
+                onClick={async () => {
+                  await joinSession();
+                  history.push('/video');
                 }}
-                value={activeSpeaker}
-                className="speaker-list"
               >
-                {speakerList.map((item) => {
-                  return (
-                    <Option value={item.deviceId} key={item.deviceId}>
-                      {item.label}
-                    </Option>
-                  );
-                })}
-              </Select>
-            </div>
-            <div className="speaker-output">
-              <span className="speaker-label">Output level</span>
-              <Progress percent={outputLevel} showInfo={false} />
-            </div>
-          </div>
-          <div className="audio-test-wrap">
-            <h3>Microphone Test</h3>
-            <div className="speaker-action">
-              <Button type="primary" onClick={onTestMicrophoneClick} className="speaker-btn">
-                {microphoneBtn}
-              </Button>
-              <Select
-                onChange={(value) => {
-                  setActiveMicrophone(value);
-                }}
-                value={activeMicrophone}
-                className="speaker-list"
-              >
-                {micList.map((item) => {
-                  return (
-                    <Option value={item.deviceId} key={item.deviceId}>
-                      {item.label}
-                    </Option>
-                  );
-                })}
-              </Select>
-            </div>
-            <div className="speaker-output">
-              <span className="speaker-label">Input level</span>
-              <Progress percent={inputLevel} showInfo={false} />
-            </div>
+                Join
+              </span>
+            </button>
           </div>
         </div>
       </div>

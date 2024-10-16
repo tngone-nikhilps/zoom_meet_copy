@@ -155,7 +155,7 @@ const MicrophoneButton = (props: MicrophoneButtonProps) => {
           trigger={['click']}
           type="ghost"
           icon={<UpOutlined />}
-          placement="topRight"
+          placement="topLeft"
           disabled={disabled}
         >
           {audioIcon}
@@ -175,7 +175,7 @@ const MicrophoneButton = (props: MicrophoneButtonProps) => {
                 trigger={['click']}
                 type="ghost"
                 icon={<UpOutlined />}
-                placement="topRight"
+                placement="topLeft"
               >
                 {audioIcon}
               </DropdownButton>
