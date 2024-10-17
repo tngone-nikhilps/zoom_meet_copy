@@ -55,6 +55,7 @@ const MicrophoneButton = (props: MicrophoneButtonProps) => {
   } = props;
   const [isPhoneModalOpen, setIsPhoneModalOpen] = useState(false);
   const [isCrcModalOpen, setIsCrcModalOpen] = useState(false);
+  const [microphoneOptionsOpen, setIsMicrophoneOptionsOpen] = useState(false);
   // const level = useCurrentAudioLevel();
   const level = useAudioLevel();
   const tooltipText = isStartedAudio ? (isMuted ? 'unmute' : 'mute') : 'start audio';
@@ -136,7 +137,15 @@ const MicrophoneButton = (props: MicrophoneButtonProps) => {
       }
     }
     if (iconType) {
-      return <IconFont type={iconType} />;
+      return (
+        <div
+          className={`flex justify-center items-center h-[3.75rem] w-[3.75rem] ${
+            isMuted ? 'bg-[#FF4949]' : 'bg-[#00B152]'
+          } rounded-full`}
+        >
+          <IconFont type={iconType} style={{ width: '1.4rem', height: 'auto' }} />
+        </div>
+      );
     }
   }, [level, audio, isMuted, isMicrophoneForbidden, isStartedAudio]);
   useEffect(() => {
@@ -145,52 +154,88 @@ const MicrophoneButton = (props: MicrophoneButtonProps) => {
     }
   }, [isStartedAudio]);
   return (
-    <div className={classNames('microphone-footer', className)}>
+    <div>
       {isStartedAudio ? (
-        <DropdownButton
-          className="vc-dropdown-button"
-          size="large"
-          menu={getAntdDropdownMenu(menuItems, onMenuItemClick)}
-          onClick={onMicrophoneClick}
-          trigger={['click']}
-          type="ghost"
-          icon={<UpOutlined />}
-          placement="topLeft"
-          disabled={disabled}
-        >
-          {audioIcon}
-        </DropdownButton>
-      ) : (
-        <Tooltip title={tooltipText}>
-          <div>
-            {isSupportPhone ? (
-              <DropdownButton
-                className="vc-dropdown-button"
-                size="large"
-                menu={getAntdDropdownMenu(
-                  [getAntdItem('Invite by phone', 'phone'), getAntdItem('Invite H323/SIP Room', 'crc')],
-                  onPhoneMenuClick
-                )}
-                onClick={onMicrophoneClick}
-                trigger={['click']}
-                type="ghost"
-                icon={<UpOutlined />}
-                placement="topLeft"
-              >
-                {audioIcon}
-              </DropdownButton>
-            ) : (
-              <Button
-                className="vc-button"
-                icon={audioIcon}
-                size="large"
-                ghost
-                shape="circle"
-                onClick={onMicrophoneClick}
-              />
+        <>
+          <div className="relative flex items-center">
+            {' '}
+            <button
+              onClick={() => {
+                onMicrophoneClick();
+              }}
+              disabled={disabled}
+            >
+              {audioIcon}
+            </button>
+            {/* <UpOutlined
+              className="ml-2 -mr-1"
+              onClick={() => {
+                setIsMicrophoneOptionsOpen(!microphoneOptionsOpen);
+              }}
+            /> */}
+            {microphoneOptionsOpen && (
+              <div className="absolute   bg-[white]  bottom-[100%]  right-0  z-[110]  mt-2 w-[500px] rounded-md shadow-lg border-primary border-[1px] ring-3 ring-primary ring-opacity-5">
+                <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu"></div>
+                {getAntdDropdownMenu(menuItems, onMenuItemClick).items?.map((speaker: any) => (
+                  <div
+                    key={speaker?.key}
+                    // onClick={() => handleItemClick(`speaker|${speaker.deviceId}`)}
+                    className={`block w-full text-left px-4 py-2 text-sm 
+                        
+                          "text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                      `}
+                    role="menuitem"
+                  >
+                    {speaker?.label}
+                    {speaker.children &&
+                      speaker.children.map((items: any) => (
+                        <>
+                          <button
+                            id={items.key}
+                            className={`block w-full text-left px-4 py-2 text-sm ${
+                              activeMicrophone == items?.key.split('|')[1]
+                                ? 'bg-gray-100 text-primary'
+                                : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
+                            }`}
+                            onClick={() => {
+                              onMenuItemClick({ key: items.key }), setIsMicrophoneOptionsOpen(false);
+                            }}
+                          >
+                            {items.label}
+                          </button>
+                        </>
+                      ))}
+                  </div>
+                ))}
+              </div>
             )}
           </div>
-        </Tooltip>
+        </>
+      ) : (
+        <div>
+          {isSupportPhone ? (
+            <DropdownButton
+              className="vc-dropdown-button"
+              size="large"
+              menu={getAntdDropdownMenu(menuItems, onMenuItemClick)}
+              onClick={onMicrophoneClick}
+              trigger={['click']}
+              type="ghost"
+              icon={<UpOutlined />}
+              placement="topRight"
+              disabled={disabled}
+            >
+              {audioIcon}
+            </DropdownButton>
+          ) : (
+            <button
+              className="vc-button flex justify-center items-center h-[3.75rem] w-[3.75rem] bg-[#FF4949] rounded-full"
+              onClick={onMicrophoneClick}
+            >
+              <img src={'./icons/microPhone.svg'} className="w-[1.4rem] h-auto" />
+            </button>
+          )}
+        </div>
       )}
       <CallOutModal
         visible={isPhoneModalOpen}

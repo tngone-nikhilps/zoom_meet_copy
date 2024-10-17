@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useRef } from 'react';
+import React, { useCallback, useState, useRef, useEffect } from 'react';
 import ZoomVideo, { TestMicrophoneReturn, TestSpeakerReturn } from '@zoom/videosdk';
 import { useMount, useUnmount } from '../../hooks';
 import './preview.scss';
@@ -106,6 +106,13 @@ const PreviewContainer: React.FunctionComponent<PreviewProps> = (props: any) => 
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
+  useEffect(() => {
+    startAudio();
+  }, []);
+  const startAudio = async () => {
+    await localAudio?.start();
+    setIsStartedAudio(true);
+  };
   const onCameraClick = useCallback(async () => {
     if (isStartedVideo) {
       await localVideo?.stop();
@@ -225,7 +232,7 @@ const PreviewContainer: React.FunctionComponent<PreviewProps> = (props: any) => 
       localVideo.stop();
     }
   });
-
+  console.log(isStartedVideo, 'isStartedVideo');
   return (
     <div className="js-preview-view">
       <div id="js-preview-view" className=" preview__root ">
@@ -233,20 +240,34 @@ const PreviewContainer: React.FunctionComponent<PreviewProps> = (props: any) => 
           <div className="px-[30px] w-full flex justify-start pt-[20px]">
             <img src="/icons/darkMode/fullLogo.svg" alt="" />
           </div>
-          <div className="preview-video  ring-primary ring-1">
-            <div className="px-[1.5rem] py-[.42rem] z-20 rounded-[4.5rem] bg-[#a2a2a2] absolute left-4 bottom-4">
-              <span className="text-[1rem]">Nikhil Ps</span>
-            </div>{' '}
-            <video className={classNames({ 'preview-video-show': !isInVBMode })} muted={true} ref={videoRef} />
-            <canvas
-              className={classNames({ 'preview-video-show': isInVBMode })}
-              width="100%"
-              height="100%"
-              ref={canvasRef}
-            />
+          <div className="preview-video mt-[20px] ring-primary ring-1">
+            <>
+              {' '}
+              <video className={classNames({ 'preview-video-show': !isInVBMode })} muted={true} ref={videoRef} />
+              <canvas
+                className={classNames({ 'preview-video-show': isInVBMode })}
+                width="100%"
+                height="100%"
+                ref={canvasRef}
+              />
+            </>
+
+            {!isStartedVideo && (
+              <div className="absolute top-0 bottom-0 left-0 right-0 bg-[#313131] h-full z-[20] flex flex-col items-center justify-center  ">
+                <div className="text-[1.5rem] text-center text-[#FFFF]">
+                  Do you want people to see you in the meeting?
+                </div>
+                <button
+                  className="bg-primary text-[#FFFF] px-[2rem] py-[.7rem] rounded-lg mt-[20px] text-white"
+                  onClick={onCameraClick}
+                >
+                  Allow Camera
+                </button>
+              </div>
+            )}
           </div>
-          <div className="video-footer video-operations video-operations-preview  mt-[3.31rem]">
-            <div>
+          <div className="video-footer video-operations video-operations-preview  mt-[3rem]">
+            <div className="flex gap-[1.2rem]">
               <MicrophoneButton
                 isStartedAudio={isStartedAudio}
                 isMuted={isMuted}
@@ -267,18 +288,18 @@ const PreviewContainer: React.FunctionComponent<PreviewProps> = (props: any) => 
                 isBlur={isBlur}
                 isPreview={true}
               />
+              <button className="h-[3.75rem] bg-[#1A71FF] rounded-[4.5rem] w-[9rem]">
+                <span
+                  className="text-[1rem] text-white"
+                  onClick={async () => {
+                    await joinSession();
+                    history.push('/video');
+                  }}
+                >
+                  Join
+                </span>
+              </button>
             </div>
-            <button className="h-[3.75rem] bg-[#1A71FF] rounded-[4.5rem] w-[9rem]">
-              <span
-                className="text-[1rem] text-white"
-                onClick={async () => {
-                  await joinSession();
-                  history.push('/video');
-                }}
-              >
-                Join
-              </span>
-            </button>
           </div>
         </div>
       </div>

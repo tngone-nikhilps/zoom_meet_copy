@@ -243,7 +243,7 @@ function App(props: AppProps) {
           <Router>
             <Switch>
               {/* <Route
-                path="/"
+                path="/home"
                 render={(props) => <Home {...props} status={status} onLeaveOrJoinSession={onLeaveOrJoinSession} />}
                 exact
               /> */}

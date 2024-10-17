@@ -1,5 +1,4 @@
-import { useContext } from 'react';
-import { Button, Tooltip, Menu, Dropdown } from 'antd';
+import { useContext, useState } from 'react';
 import { CheckOutlined, UpOutlined, VideoCameraAddOutlined, VideoCameraOutlined } from '@ant-design/icons';
 import ZoomMediaContext from '../../../context/media-context';
 import classNames from 'classnames';
@@ -47,6 +46,7 @@ const CameraButton = (props: CameraButtonProps) => {
     onSelectVideoPlayback
   } = props;
   const { mediaStream } = useContext(ZoomMediaContext);
+  const [cameraOptionsOpen, setIsCameraOptionsOpen] = useState(false);
   const onMenuItemClick = (payload: { key: any }) => {
     if (payload.key === 'mirror') {
       onMirrorVideo?.();
@@ -94,29 +94,70 @@ const CameraButton = (props: CameraButtonProps) => {
   return (
     <div className={classNames('camera-footer', className)}>
       {isStartedVideo && menuItems ? (
-        <Dropdown.Button
-          className="vc-dropdown-button"
-          size="large"
-          menu={getAntdDropdownMenu(menuItems, onMenuItemClick)}
-          onClick={onCameraClick}
-          trigger={['click']}
-          type="ghost"
-          icon={<UpOutlined />}
-          placement="topRight"
-        >
-          <VideoCameraOutlined />
-        </Dropdown.Button>
+        <>
+          <div className="relative flex items-center">
+            <button
+              className={`flex justify-center relative items-center h-[3.75rem] w-[3.75rem]  ${
+                !isStartedVideo ? 'bg-[#FF4949]' : 'bg-[#00B152]'
+              } rounded-full`}
+              onClick={onCameraClick}
+            >
+              <img src={'./icons/videoEnabled.svg'} className="w-[1.4rem] h-auto" />
+            </button>
+            {/* <UpOutlined
+              className="ml-2 -mr-1"
+              onClick={() => {
+                setIsCameraOptionsOpen(!cameraOptionsOpen);
+              }}
+            /> */}
+            {cameraOptionsOpen && (
+              <div className="absolute   bg-[white]  bottom-[100%]  right-0  z-[110]  mt-2 w-[500px] rounded-md shadow-lg border-primary border-[1px] ring-3 ring-primary ring-opacity-5">
+                <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu"></div>
+                {getAntdDropdownMenu(menuItems, onMenuItemClick).items?.map((speaker: any) => (
+                  <div
+                    key={speaker?.key}
+                    // onClick={() => handleItemClick(`speaker|${speaker.deviceId}`)}
+                    className={`block w-full text-left px-4 py-2 text-sm
+                           "text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                      `}
+                    role="menuitem"
+                  >
+                    {speaker?.label}
+                    {speaker.children &&
+                      speaker.children.map((items: any) => (
+                        <>
+                          <button
+                            id={items.key}
+                            className={`block w-full text-left px-4 py-2 text-sm ${
+                              activeCamera == items?.key.split('|')[1]
+                                ? 'bg-gray-100 text-primary'
+                                : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
+                            }`}
+                            onClick={() => {
+                              onMenuItemClick({ key: items.key }), setIsCameraOptionsOpen(false);
+                            }}
+                          >
+                            {items.label}
+                          </button>
+                        </>
+                      ))}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </>
       ) : (
-        <Tooltip title={`${isStartedVideo ? 'stop camera' : 'start camera'}`}>
-          <Button
-            className={classNames('vc-button', className)}
-            icon={isStartedVideo ? <VideoCameraOutlined /> : <VideoCameraAddOutlined />}
-            ghost={true}
-            shape="circle"
-            size="large"
-            onClick={onCameraClick}
-          />
-        </Tooltip>
+        <button
+          className=" flex justify-center relative items-center h-[3.75rem] w-[3.75rem] bg-[#FF4949] rounded-full"
+          onClick={onCameraClick}
+        >
+          {isStartedVideo ? (
+            <img src={'./icons/videoEnabled.svg'} className="w-[1.4rem] h-auto" />
+          ) : (
+            <img src={'./icons/videoDisabled.svg'} className="w-[1.4rem] h-auto" />
+          )}
+        </button>
       )}
     </div>
   );
