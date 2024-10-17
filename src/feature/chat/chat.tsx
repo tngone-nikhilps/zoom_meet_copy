@@ -48,17 +48,19 @@ const ChatContainer = ({ setIsChatWindowOpen, isChatWindowOpen }: ChatContainerP
       chatWrapRef.current.scrollTo(0, chatWrapRef.current.scrollHeight);
     }
   }, [records]);
+  console.log(chatClient.getHistory(), 'recordddsss');
   return (
-    <div
-      className="chat-container"
-      onClick={() => {
-        setIsChatWindowOpen(!isChatWindowOpen);
-      }}
-    >
+    <div className="chat-container">
       <div className="chat-wrap">
-        <h2>Chat</h2>
+        <h2
+          onClick={() => {
+            setIsChatWindowOpen(!isChatWindowOpen);
+          }}
+        >
+          Chat
+        </h2>
         <div className="chat-message-wrap" ref={chatWrapRef}>
-          {records.map((record) => (
+          {chatClient.getHistory().map((record) => (
             <ChatMessageItem
               record={record}
               currentUserId={zmClient.getSessionInfo().userId}

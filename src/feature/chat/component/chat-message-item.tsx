@@ -6,7 +6,7 @@ import { ChatRecord } from '../chat-types';
 import ChatFileMessageItem from './chat-file-message-item';
 import './chat-message-item.scss';
 interface ChatMessageItemProps {
-  record: ChatRecord;
+  record: any;
   currentUserId: number;
   setChatUser: (userId: number) => void;
   resendFile: (retryToken: string, fileUuid: string) => void;
