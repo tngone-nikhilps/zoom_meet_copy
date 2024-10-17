@@ -242,11 +242,11 @@ function App(props: AppProps) {
         <ZoomMediaContext.Provider value={mediaContext}>
           <Router>
             <Switch>
-              {/* <Route
+              <Route
                 path="/home"
                 render={(props) => <Home {...props} status={status} onLeaveOrJoinSession={onLeaveOrJoinSession} />}
                 exact
-              /> */}
+              />
               <Route path="/index.html" component={Home} exact />
               <Route path="/chat" component={Chat} />
               <Route path="/command" component={Command} />

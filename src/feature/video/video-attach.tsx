@@ -121,7 +121,11 @@ const VideoContainer: React.FunctionComponent<RouteComponentProps> = (props) => 
             <div className="user-list">
               <>
                 {participants.map((user) => {
-                  if (user.userId === zmClient.getSessionInfo().userId) {
+                  if (
+                    user.userId === zmClient.getSessionInfo().userId &&
+                    participants.length > 1 &&
+                    !isRecieveSharing
+                  ) {
                     return (
                       <div className="user-video-cell w-[20vw] aspect-video" key={user.userId}>
                         {avatarActionState?.avatarActionState[user?.userId]?.videoResolutionAdjust?.toggled && (
@@ -157,7 +161,7 @@ const VideoContainer: React.FunctionComponent<RouteComponentProps> = (props) => 
                     );
                   }
                   return (
-                    <div className="video-cell w-full h-[80vh]" key={user.userId}>
+                    <div className={`video-cell ${!isRecieveSharing ? 'w-full h-[80vh]' : ''}`} key={user.userId}>
                       {avatarActionState?.avatarActionState[user?.userId]?.videoResolutionAdjust?.toggled && (
                         <div className="change-video-resolution">
                           <Radio.Group

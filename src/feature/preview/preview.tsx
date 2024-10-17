@@ -254,9 +254,7 @@ const PreviewContainer: React.FunctionComponent<PreviewProps> = (props: any) => 
 
             {!isStartedVideo && (
               <div className="absolute top-0 bottom-0 left-0 right-0 bg-[#313131] h-full z-[20] flex flex-col items-center justify-center  ">
-                <div className="text-[1.5rem] text-center text-[#FFFF]">
-                  Do you want people to see you in the meeting?
-                </div>
+                <div className="text-[1.5rem] text-center text-[#FFFF]">Do you want enable camera?</div>
                 <button
                   className="bg-primary text-[#FFFF] px-[2rem] py-[.7rem] rounded-lg mt-[20px] text-white"
                   onClick={onCameraClick}

@@ -33,6 +33,7 @@ import IsoRecordingModal from './recording-ask-modal';
 import { LiveStreamButton, LiveStreamModal } from './live-stream';
 import { IconFont } from '../../../component/icon-font';
 import { VideoMaskModel } from './video-mask-modal';
+import ChatContainer from '../../chat/chat';
 interface VideoFooterProps {
   className?: string;
   selfShareCanvas?: HTMLCanvasElement | HTMLVideoElement | null;
@@ -557,6 +558,7 @@ const VideoFooter = (props: VideoFooterProps) => {
   const recordingButtons: RecordButtonProps[] = getRecordingButtons(recordingStatus, zmClient.isHost());
   return (
     <div className={classNames('video-footer', className)}>
+      <ChatContainer></ChatContainer>
       {isAudioEnable && (
         <MicrophoneButton
           isStartedAudio={isStartedAudio}
