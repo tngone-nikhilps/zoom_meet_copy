@@ -107,7 +107,7 @@ const VideoContainer: React.FunctionComponent<RouteComponentProps> = (props) => 
     },
     [videoPlayerListRef, mediaStream]
   );
-
+  console.log(zmClient.getCurrentUserInfo(), 'participants');
   return (
     <div className="viewport" style={{ height: 'auto', width: 'auto', minHeight: '100vh' }}>
       <ShareView ref={shareViewRef} onRecieveSharingChange={setIsRecieveSharing} />
@@ -118,55 +118,80 @@ const VideoContainer: React.FunctionComponent<RouteComponentProps> = (props) => 
       >
         <video-player-container class="video-container-wrap">
           <AvatarActionContext.Provider value={avatarActionState}>
-            <ul className="user-list">
-              {participants.map((user) => {
-                return (
-                  <div
-                    className="video-cell"
-                    key={user.userId}
-                    style={
-                      // Bugs in react, aspectRatio doesn't work. https://github.com/facebook/react/issues/21098
-                      aspectRatio[`${user.userId}`]
-                        ? {
-                            aspectRatio: aspectRatio[`${user.userId}`],
-                            maxWidth: maxVideoCellWidth
-                          }
-                        : { maxWidth: maxVideoCellWidth }
-                    }
-                  >
-                    {avatarActionState?.avatarActionState[user?.userId]?.videoResolutionAdjust?.toggled && (
-                      <div className="change-video-resolution">
-                        <Radio.Group
-                          options={optionsOfVideoResolution}
-                          onChange={(value) => {
-                            onVideoResolutionChange(value, user.userId);
-                          }}
-                          defaultValue={VideoQuality.Video_720P}
-                          optionType="button"
-                          buttonStyle="solid"
+            <div className="user-list">
+              <>
+                {participants.map((user) => {
+                  if (user.userId === zmClient.getSessionInfo().userId) {
+                    return (
+                      <div className="user-video-cell w-[20vw] aspect-video" key={user.userId}>
+                        {avatarActionState?.avatarActionState[user?.userId]?.videoResolutionAdjust?.toggled && (
+                          <div className="change-video-resolution">
+                            <Radio.Group
+                              options={optionsOfVideoResolution}
+                              onChange={(value) => {
+                                onVideoResolutionChange(value, user.userId);
+                              }}
+                              defaultValue={VideoQuality.Video_720P}
+                              optionType="button"
+                              buttonStyle="solid"
+                            />
+                          </div>
+                        )}
+                        {user.bVideoOn && (
+                          <div>
+                            <video-player
+                              class="video-player"
+                              ref={(element) => {
+                                setVideoPlayerRef(user.userId, element);
+                              }}
+                            />
+                          </div>
+                        )}
+                        <Avatar
+                          participant={user}
+                          key={user.userId}
+                          isActive={activeVideo === user.userId}
+                          networkQuality={networkQuality[`${user.userId}`]}
                         />
                       </div>
-                    )}
-                    {user.bVideoOn && (
-                      <div>
-                        <video-player
-                          class="video-player"
-                          ref={(element) => {
-                            setVideoPlayerRef(user.userId, element);
-                          }}
-                        />
-                      </div>
-                    )}
-                    <Avatar
-                      participant={user}
-                      key={user.userId}
-                      isActive={activeVideo === user.userId}
-                      networkQuality={networkQuality[`${user.userId}`]}
-                    />
-                  </div>
-                );
-              })}
-            </ul>
+                    );
+                  }
+                  return (
+                    <div className="video-cell w-full h-[80vh]" key={user.userId}>
+                      {avatarActionState?.avatarActionState[user?.userId]?.videoResolutionAdjust?.toggled && (
+                        <div className="change-video-resolution">
+                          <Radio.Group
+                            options={optionsOfVideoResolution}
+                            onChange={(value) => {
+                              onVideoResolutionChange(value, user.userId);
+                            }}
+                            defaultValue={VideoQuality.Video_720P}
+                            optionType="button"
+                            buttonStyle="solid"
+                          />
+                        </div>
+                      )}
+                      {user.bVideoOn && (
+                        <div>
+                          <video-player
+                            class="video-player"
+                            ref={(element) => {
+                              setVideoPlayerRef(user.userId, element);
+                            }}
+                          />
+                        </div>
+                      )}
+                      <Avatar
+                        participant={user}
+                        key={user.userId}
+                        isActive={activeVideo === user.userId}
+                        networkQuality={networkQuality[`${user.userId}`]}
+                      />
+                    </div>
+                  );
+                })}
+              </>
+            </div>
           </AvatarActionContext.Provider>
         </video-player-container>
       </div>

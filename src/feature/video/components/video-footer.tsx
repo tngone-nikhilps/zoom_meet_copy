@@ -606,7 +606,7 @@ const VideoFooter = (props: VideoFooterProps) => {
           }}
         />
       )}
-      {recordingButtons.map((button: RecordButtonProps) => {
+      {/* {recordingButtons.map((button: RecordButtonProps) => {
         return (
           <RecordingButton
             key={button.text}
@@ -651,7 +651,7 @@ const VideoFooter = (props: VideoFooterProps) => {
         <Tooltip title="Secondary audio on">
           <SoundOutlined style={{ position: 'fixed', top: '45px', left: '10px', color: '#f60', fontSize: '24px' }} />
         </Tooltip>
-      )}
+      )} */}
       <LeaveButton onLeaveClick={onLeaveClick} isHost={zmClient.isHost()} onEndClick={onEndClick} />
 
       <AudioVideoStatisticModal

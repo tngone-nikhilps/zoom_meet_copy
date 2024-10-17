@@ -67,6 +67,7 @@
       flex-wrap: wrap;
       justify-content: space-around;
       align-items: center;
+      position: relative;
 
       .video-cell {
         min-width: 256px;
@@ -81,6 +82,25 @@
           display: block;
           position: absolute;
           top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+        }
+      }
+      .user-video-cell {
+        position: absolute;
+        flex: 1;
+        right: 0;
+          bottom: 0;
+        margin: 12px;
+        .change-video-resolution {
+          position: absolute;
+        }
+        .video-player {
+          display: block;
+          position: absolute;
+         
+           top: 0;
           left: 0;
           right: 0;
           bottom: 0;
