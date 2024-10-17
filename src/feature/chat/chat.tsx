@@ -8,7 +8,11 @@ import { useChat } from './hooks/useChat';
 import './chat.scss';
 
 const { TextArea } = Input;
-const ChatContainer = () => {
+interface ChatContainerProps {
+  setIsChatWindowOpen: (state: boolean) => void;
+  isChatWindowOpen: boolean;
+}
+const ChatContainer = ({ setIsChatWindowOpen, isChatWindowOpen }: ChatContainerProps) => {
   const zmClient = useContext(ZoomContext);
   const chatClient = zmClient.getChatClient();
   const [chatDraft, setChatDraft] = useState<string>('');
@@ -45,7 +49,12 @@ const ChatContainer = () => {
     }
   }, [records]);
   return (
-    <div className="chat-container">
+    <div
+      className="chat-container"
+      onClick={() => {
+        setIsChatWindowOpen(!isChatWindowOpen);
+      }}
+    >
       <div className="chat-wrap">
         <h2>Chat</h2>
         <div className="chat-message-wrap" ref={chatWrapRef}>

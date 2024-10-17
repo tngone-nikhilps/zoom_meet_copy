@@ -52,6 +52,7 @@ const VideoFooter = (props: VideoFooterProps) => {
     zmClient.getCurrentUserInfo() && zmClient.getCurrentUserInfo().audio !== ''
   );
   const [isStartedVideo, setIsStartedVideo] = useState(zmClient.getCurrentUserInfo()?.bVideoOn);
+  const [isChatWindowOpen, setIsChatWindowOpen] = useState(false);
   const [audio, setAudio] = useState(zmClient.getCurrentUserInfo()?.audio);
   const [isSupportPhone, setIsSupportPhone] = useState(false);
   const [phoneCountryList, setPhoneCountryList] = useState<any[]>([]);
@@ -558,7 +559,9 @@ const VideoFooter = (props: VideoFooterProps) => {
   const recordingButtons: RecordButtonProps[] = getRecordingButtons(recordingStatus, zmClient.isHost());
   return (
     <div className={classNames('video-footer', className)}>
-      <ChatContainer></ChatContainer>
+      {isChatWindowOpen && (
+        <ChatContainer isChatWindowOpen={isChatWindowOpen} setIsChatWindowOpen={setIsChatWindowOpen}></ChatContainer>
+      )}
       {isAudioEnable && (
         <MicrophoneButton
           isStartedAudio={isStartedAudio}
@@ -654,6 +657,14 @@ const VideoFooter = (props: VideoFooterProps) => {
           <SoundOutlined style={{ position: 'fixed', top: '45px', left: '10px', color: '#f60', fontSize: '24px' }} />
         </Tooltip>
       )} */}
+      <button
+        className="h-[3.75rem] w-[3.75rem] bg-primary"
+        onClick={() => {
+          setIsChatWindowOpen(!isChatWindowOpen);
+        }}
+      >
+        Chat
+      </button>
       <LeaveButton onLeaveClick={onLeaveClick} isHost={zmClient.isHost()} onEndClick={onEndClick} />
 
       <AudioVideoStatisticModal
