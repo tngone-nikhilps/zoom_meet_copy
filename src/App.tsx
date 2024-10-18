@@ -17,6 +17,7 @@ import Command from './feature/command/command';
 import Subsession from './feature/subsession/subsession';
 import { MediaStream } from './index-types';
 import './App.css';
+import SVGLoader from './component/svgLoader';
 
 interface AppProps {
   meetingArgs: {
@@ -237,7 +238,7 @@ function App(props: AppProps) {
   console.log(loading, 'isLoading');
   return (
     <div className="App">
-      {loading && <LoadingLayer content={loadingText} />}
+      {loading && <SVGLoader loadingText={loadingText} />}
       {!loading && (
         <ZoomMediaContext.Provider value={mediaContext}>
           <Router>

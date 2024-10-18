@@ -1,5 +1,5 @@
 {
-  "name": "react-video-sdk-demo",
+  "name": "interview",
   "version": "1.12.5",
   "private": true,
   "dependencies": {
@@ -11,6 +11,7 @@
     "antd": "4.24.3",
     "classnames": "^2.2.6",
     "crypto-js": "^4.0.0",
+    "gsap": "^3.12.5",
     "immer": "^9.0.6",
     "js-base64": "^3.6.0",
     "jsrsasign": "^11.0.0",
@@ -54,6 +55,7 @@
     "@types/crypto-js": "^4.0.1",
     "@types/jest": "^26.0.21",
     "@types/jsrsasign": "^8.0.10",
+    "@types/gsap": "^3.0.0",
     "@types/lodash": "^4.14.168",
     "@types/react": "18.2.52",
     "@types/react-dom": "18.2.18",
