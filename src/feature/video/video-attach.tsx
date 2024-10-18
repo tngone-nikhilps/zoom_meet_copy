@@ -161,7 +161,7 @@ const VideoContainer: React.FunctionComponent<RouteComponentProps> = (props) => 
                     );
                   }
                   return (
-                    <div className={`video-cell ${!isRecieveSharing ? 'w-full h-[80vh]' : ''}`} key={user.userId}>
+                    <div className={`video-cell ${!isRecieveSharing ? 'w-full h-[70vh]' : ''}`} key={user.userId}>
                       {avatarActionState?.avatarActionState[user?.userId]?.videoResolutionAdjust?.toggled && (
                         <div className="change-video-resolution">
                           <Radio.Group
@@ -200,7 +200,7 @@ const VideoContainer: React.FunctionComponent<RouteComponentProps> = (props) => 
         </video-player-container>
       </div>
       <VideoFooter className="video-operations" sharing selfShareCanvas={shareViewRef.current?.selfShareRef} />
-      <ReportBtn />
+      {/* <ReportBtn /> */}
     </div>
   );
 };

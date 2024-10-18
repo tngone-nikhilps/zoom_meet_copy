@@ -16,29 +16,19 @@ const LeaveButton = (props: LeaveButtonProps) => {
   const { onLeaveClick, onEndClick, isHost } = props;
 
   return isHost ? (
-    <DropdownButton
-      className="vc-dropdown-button"
-      size="large"
-      menu={getAntdDropdownMenu([getAntdItem('End session', 'end')], onEndClick)}
-      trigger={['click']}
-      type="ghost"
-      onClick={onLeaveClick}
-      icon={<UpOutlined />}
-      placement="topRight"
+    <button
+      className=" ml-[20px] flex justify-center relative items-center h-[3.75rem] w-[7em] bg-[#FF4949] text-[1rem] font-[600] text-[#FFFF] rounded-[3.7rem]"
+      onClick={onEndClick}
     >
-      <IconFont type="icon-leave" />
-    </DropdownButton>
+      End Call
+    </button>
   ) : (
-    <Button
-      className={classNames('vc-button')}
-      icon={<IconFont type="icon-leave" />}
-      // eslint-disable-next-line react/jsx-boolean-value
-      ghost={true}
-      shape="circle"
-      size="large"
+    <button
+      className="ml-[20px] flex justify-center relative items-center h-[3.75rem] w-[7em] bg-[#FF4949] text-[1rem] font-[600] rounded-[3.7rem] text-[#FFFF] "
       onClick={onLeaveClick}
-      title="Leave session"
-    />
+    >
+      End Call
+    </button>
   );
 };
 

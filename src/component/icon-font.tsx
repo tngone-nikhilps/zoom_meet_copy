@@ -60,6 +60,7 @@ import IconAudioMuted from './svgs/audio/audio-muted.svg';
 import IconAudioUnmuted from './svgs/audio/audio-unmuted.svg';
 import IconAudioDisallow from './svgs/audio/audio-disallow.svg';
 import IconAudioNoDevices from './svgs/audio/audio-no-devices.svg';
+import IconMessage from './svgs/icon-message.svg';
 
 const iconComponentMap: { [key: string]: any } = {
   'icon-advanced': IconAdvanced,
@@ -118,7 +119,8 @@ const iconComponentMap: { [key: string]: any } = {
   'icon-audio-muted': IconAudioMuted,
   'icon-audio-unmuted': IconAudioUnmuted,
   'icon-audio-disallow': IconAudioDisallow,
-  'icon-audio-no-devices': IconAudioNoDevices
+  'icon-audio-no-devices': IconAudioNoDevices,
+  'icon-message': IconMessage
 };
 interface IconFontProps {
   type: string;

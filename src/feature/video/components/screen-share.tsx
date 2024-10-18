@@ -44,29 +44,12 @@ const ScreenShareButton = (props: ScreenShareButtonProps) => {
   return (
     // eslint-disable-next-line react/jsx-no-useless-fragment
     <>
-      {isHostOrManager ? (
-        <DropdownButton
-          className="vc-dropdown-button"
-          size="large"
-          menu={getAntdDropdownMenu(menu, onMenuItemClick)}
-          onClick={onScreenShareClick}
-          trigger={['click']}
-          type="ghost"
-          icon={<UpOutlined />}
-          placement="topRight"
-        >
-          <IconFont type="icon-share" />
-        </DropdownButton>
-      ) : (
-        <Button
-          className={classNames('screen-share-button', 'vc-button')}
-          icon={<IconFont type="icon-share" />}
-          ghost={true}
-          shape="circle"
-          size="large"
-          onClick={onScreenShareClick}
-        />
-      )}
+      <button
+        className=" flex justify-center relative items-center h-[3.75rem] w-[3.75rem] bg-[#1B3728] rounded-full"
+        onClick={onScreenShareClick}
+      >
+        <IconFont type="icon-share" />
+      </button>
     </>
   );
 };

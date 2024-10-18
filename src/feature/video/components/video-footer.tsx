@@ -558,60 +558,68 @@ const VideoFooter = (props: VideoFooterProps) => {
 
   const recordingButtons: RecordButtonProps[] = getRecordingButtons(recordingStatus, zmClient.isHost());
   return (
-    <div className={classNames('video-footer', className)}>
-      {isChatWindowOpen && (
-        <ChatContainer isChatWindowOpen={isChatWindowOpen} setIsChatWindowOpen={setIsChatWindowOpen}></ChatContainer>
-      )}
-      {isAudioEnable && (
-        <MicrophoneButton
-          isStartedAudio={isStartedAudio}
-          isMuted={isMuted}
-          isSupportPhone={isSupportPhone}
-          audio={audio}
-          phoneCountryList={phoneCountryList}
-          onPhoneCallClick={onPhoneCall}
-          onPhoneCallCancel={onPhoneCallCancel}
-          phoneCallStatus={getPhoneCallStatusDescription(phoneCallStatus)}
-          onMicrophoneClick={onMicrophoneClick}
-          onMicrophoneMenuClick={onMicrophoneMenuClick}
-          microphoneList={micList}
-          speakerList={speakerList}
-          activeMicrophone={activeMicrophone}
-          activeSpeaker={activeSpeaker}
-          disabled={isComputerAudioDisabled}
-          isMicrophoneForbidden={isMicrophoneForbidden}
-          isSecondaryAudioStarted={isSecondaryAudioStarted}
-        />
-      )}
-      <CameraButton
-        isStartedVideo={isStartedVideo}
-        onCameraClick={onCameraClick}
-        onSwitchCamera={onSwitchCamera}
-        onMirrorVideo={onMirrorVideo}
-        onVideoStatistic={() => {
-          setSelectedStatisticTab('video');
-          setStatisticVisible(true);
-        }}
-        onBlurBackground={onBlurBackground}
-        onSelectVideoPlayback={onSelectVideoPlayback}
-        activePlaybackUrl={activePlaybackUrl}
-        cameraList={cameraList}
-        activeCamera={activeCamera}
-        isMirrored={isMirrored}
-        isBlur={isBlur}
-      />
-      {sharing && (
-        <ScreenShareButton
-          sharePrivilege={sharePrivilege}
-          isHostOrManager={zmClient.isHost() || zmClient.isManager()}
-          onScreenShareClick={onScreenShareClick}
-          onSharePrivilegeClick={async (privilege) => {
-            await mediaStream?.setSharePrivilege(privilege);
-            setSharePrivileg(privilege);
+    <div className={classNames('flex items-center w-full justify-between h-[18vh] bg-[#1F1F1F]', className)}>
+      <div></div>
+      <div className="flex gap-[1rem]">
+        {isChatWindowOpen && (
+          <ChatContainer isChatWindowOpen={isChatWindowOpen} setIsChatWindowOpen={setIsChatWindowOpen}></ChatContainer>
+        )}
+        {isAudioEnable && (
+          <MicrophoneButton
+            isStartedAudio={isStartedAudio}
+            isMuted={isMuted}
+            isSupportPhone={isSupportPhone}
+            audio={audio}
+            phoneCountryList={phoneCountryList}
+            onPhoneCallClick={onPhoneCall}
+            onPhoneCallCancel={onPhoneCallCancel}
+            phoneCallStatus={getPhoneCallStatusDescription(phoneCallStatus)}
+            onMicrophoneClick={onMicrophoneClick}
+            onMicrophoneMenuClick={onMicrophoneMenuClick}
+            microphoneList={micList}
+            speakerList={speakerList}
+            activeMicrophone={activeMicrophone}
+            activeSpeaker={activeSpeaker}
+            disabled={isComputerAudioDisabled}
+            isMicrophoneForbidden={isMicrophoneForbidden}
+            isSecondaryAudioStarted={isSecondaryAudioStarted}
+          />
+        )}
+        <CameraButton
+          isStartedVideo={isStartedVideo}
+          onCameraClick={onCameraClick}
+          onSwitchCamera={onSwitchCamera}
+          onMirrorVideo={onMirrorVideo}
+          onVideoStatistic={() => {
+            setSelectedStatisticTab('video');
+            setStatisticVisible(true);
           }}
+          onBlurBackground={onBlurBackground}
+          onSelectVideoPlayback={onSelectVideoPlayback}
+          activePlaybackUrl={activePlaybackUrl}
+          cameraList={cameraList}
+          activeCamera={activeCamera}
+          isMirrored={isMirrored}
+          isBlur={isBlur}
         />
-      )}
-      {/* {recordingButtons.map((button: RecordButtonProps) => {
+        {sharing && (
+          <ScreenShareButton
+            sharePrivilege={sharePrivilege}
+            isHostOrManager={zmClient.isHost() || zmClient.isManager()}
+            onScreenShareClick={onScreenShareClick}
+            onSharePrivilegeClick={async (privilege) => {
+              await mediaStream?.setSharePrivilege(privilege);
+              setSharePrivileg(privilege);
+            }}
+          />
+        )}
+        <button
+          className=" flex justify-center relative items-center h-[3.75rem] w-[3.75rem] bg-[#1B3728] rounded-full"
+          // onClick={onScreenShareClick}
+        >
+          <IconFont type="icon-share" />
+        </button>
+        {/* {recordingButtons.map((button: RecordButtonProps) => {
         return (
           <RecordingButton
             key={button.text}
@@ -657,38 +665,42 @@ const VideoFooter = (props: VideoFooterProps) => {
           <SoundOutlined style={{ position: 'fixed', top: '45px', left: '10px', color: '#f60', fontSize: '24px' }} />
         </Tooltip>
       )} */}
-      <button
-        className="h-[3.75rem] w-[3.75rem] bg-primary"
-        onClick={() => {
-          setIsChatWindowOpen(!isChatWindowOpen);
-        }}
-      >
-        Chat
-      </button>
-      <LeaveButton onLeaveClick={onLeaveClick} isHost={zmClient.isHost()} onEndClick={onEndClick} />
 
-      <AudioVideoStatisticModal
-        visible={statisticVisible}
-        setVisible={setStatisticVisible}
-        defaultTab={selecetedStatisticTab}
-        isStartedAudio={isStartedAudio}
-        isMuted={isMuted}
-        isStartedVideo={isStartedVideo}
-      />
+        <LeaveButton onLeaveClick={onLeaveClick} isHost={zmClient.isHost()} onEndClick={onEndClick} />
 
-      {recordingIsoStatus === RecordingStatus.Ask && (
-        <IsoRecordingModal
-          onClick={() => {
-            recordingClient?.acceptIndividualRecording();
-          }}
-          onCancel={() => {
-            recordingClient?.declineIndividualRecording();
-          }}
+        <AudioVideoStatisticModal
+          visible={statisticVisible}
+          setVisible={setStatisticVisible}
+          defaultTab={selecetedStatisticTab}
+          isStartedAudio={isStartedAudio}
+          isMuted={isMuted}
+          isStartedVideo={isStartedVideo}
         />
-      )}
-      {!mediaStream?.isSupportVirtualBackground() && (
-        <VideoMaskModel visible={videoMaskVisible} setVisible={setVideoMaskVisible} isMirrored={isMirrored} />
-      )}
+
+        {recordingIsoStatus === RecordingStatus.Ask && (
+          <IsoRecordingModal
+            onClick={() => {
+              recordingClient?.acceptIndividualRecording();
+            }}
+            onCancel={() => {
+              recordingClient?.declineIndividualRecording();
+            }}
+          />
+        )}
+        {!mediaStream?.isSupportVirtualBackground() && (
+          <VideoMaskModel visible={videoMaskVisible} setVisible={setVideoMaskVisible} isMirrored={isMirrored} />
+        )}
+      </div>
+      <div className="mr-[1.8rem]">
+        <button
+          className=" flex justify-center relative items-center h-[3.75rem] w-[3.75rem] bg-primary rounded-full"
+          onClick={() => {
+            setIsChatWindowOpen(!isChatWindowOpen);
+          }}
+        >
+          <IconFont type="icon-message" />
+        </button>
+      </div>
     </div>
   );
 };

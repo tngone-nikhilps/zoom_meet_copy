@@ -121,12 +121,7 @@ const MicrophoneButton = (props: MicrophoneButtonProps) => {
         if (audio === 'phone') {
           iconType = 'icon-phone';
         } else {
-          if (level !== 0) {
-            // iconType = 'icon-audio-animation';
-            return <AudoiAnimationIcon level={level} />;
-          } else {
-            iconType = 'icon-audio-unmuted';
-          }
+          iconType = 'icon-audio-unmuted';
         }
       }
     } else {
@@ -229,7 +224,7 @@ const MicrophoneButton = (props: MicrophoneButtonProps) => {
             </DropdownButton>
           ) : (
             <button
-              className="vc-button flex justify-center items-center h-[3.75rem] w-[3.75rem] bg-[#FF4949] rounded-full"
+              className=" flex justify-center items-center h-[3.75rem] w-[3.75rem] bg-[#FF4949] rounded-full"
               onClick={onMicrophoneClick}
             >
               <img src={'./icons/microPhone.svg'} className="w-[1.4rem] h-auto" />
